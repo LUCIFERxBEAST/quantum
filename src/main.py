@@ -7,6 +7,7 @@ import pandas as pd
 from preprocess import load_data, clean_text
 from features import FeatureExtractor
 from quantum_model import QuantumSpamClassifier
+from grover_classifier import GroverSpamClassifier
 
 def main():
     parser = argparse.ArgumentParser(description="Quantum Accelerated Spam Mail Checker")
@@ -15,6 +16,7 @@ def main():
     parser.add_argument('--qubits', type=int, default=2, help='Number of qubits/features')
     parser.add_argument('--test_size', type=float, default=0.3, help='Test set size ratio')
     parser.add_argument('--classical', action='store_true', help='Use classical SVM instead of Quantum')
+    parser.add_argument('--grover', action='store_true', help='Use Grover-based Search Classifier')
     
     args = parser.parse_args()
     
@@ -64,21 +66,57 @@ def main():
     fe = FeatureExtractor(n_components=args.qubits)
     X = fe.fit_transform(X_text)
     
-    # 4. Train/Test Split
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=args.test_size, random_state=42)
-    
-    # 5. Model Training
-    use_quantum = not args.classical
-    model = QuantumSpamClassifier(n_qubits=args.qubits, use_quantum=use_quantum)
-    model.train(X_train, y_train)
-    
-    # 6. Evaluation
-    print("Evaluating model...")
-    y_pred = model.predict(X_test)
-    
-    print("\n--- Classification Report ---")
-    print(classification_report(y_test, y_pred, target_names=['Ham', 'Spam']))
-    print(f"Accuracy: {accuracy_score(y_test, y_pred):.4f}")
+    # 4. Train/Test Split (Only for Learning Models)
+    if not args.grover:
+        # Standard ML Split
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=args.test_size, random_state=42)
+        
+        use_quantum = not args.classical
+        if use_quantum:
+            model = QuantumSpamClassifier(n_qubits=args.qubits, use_quantum=True)
+        else:
+            print("Initializing Classical SVM...")
+            model = QuantumSpamClassifier(n_qubits=args.qubits, use_quantum=False) # Helper wrapper
+
+        model.train(X_train, y_train)
+        
+        # 6. Evaluation
+        print("Evaluating model...")
+        y_pred = model.predict(X_test)
+        
+        print("\n--- Classification Report ---")
+        print(classification_report(y_test, y_pred, target_names=['Ham', 'Spam']))
+        print(f"Accuracy: {accuracy_score(y_test, y_pred):.4f}")
+
+    else:
+        # 5. Grover's "Classification" (Search)
+        # Grover doesn't learn, so we don't need a split. We can run it on the FULL loaded dataset.
+        print(f"Running Grover's Search on ALL {len(X_text)} loaded samples...")
+        
+        # Expanded list of suspicious keywords for a "Smarter" Oracle
+        # Source: User provided categories
+        keywords = [
+            # Financial/Urgency
+            'act', 'now', 'immediate', 'limited', 'time', 'prize', 'claims', 'cash', 'bonus',
+            # Marketing/Sales
+            'buy', 'clearance', 'discount', 'offer', 'promo', 'subscribe', 'trial',
+            # Account/Security
+            'verify', 'suspend', 'security', 'unauthorized', 'password', 'login',
+            # Common "Spammy" verbs
+            'earn', 'save', 'guaranteed', 'exclusive', 'congratulations',
+            # Original High-Frequency Spam Words
+            'win', 'free', 'urgent', 'call', 'winner', 'selected', 'mobile', 'text', 'stop', 'reply'
+        ]
+        print(f"Using Grover-based Classifier (Keywords: {keywords})...")
+        model = GroverSpamClassifier(suspicious_keywords=keywords)
+        
+        print("Evaluating model...")
+        # Run on EVERYTHING
+        y_pred = model.predict(X_text)
+        
+        print("\n--- Grover's Algorithm Classification Report (Full Dataset) ---")
+        print(classification_report(y, y_pred, target_names=['Ham', 'Spam']))
+        print(f"Accuracy: {accuracy_score(y, y_pred):.4f}")
 
 if __name__ == "__main__":
     main()
