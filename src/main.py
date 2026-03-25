@@ -85,7 +85,7 @@ def main():
         y_pred = model.predict(X_test)
         
         print("\n--- Classification Report ---")
-        print(classification_report(y_test, y_pred, target_names=['Ham', 'Spam']))
+        print(classification_report(y_test, y_pred, labels=[0, 1], target_names=['Ham', 'Spam'], zero_division=0))
         print(f"Accuracy: {accuracy_score(y_test, y_pred):.4f}")
 
     else:
@@ -115,7 +115,7 @@ def main():
         y_pred = model.predict(X_text)
         
         print("\n--- Grover's Algorithm Classification Report (Full Dataset) ---")
-        print(classification_report(y, y_pred, target_names=['Ham', 'Spam']))
+        print(classification_report(y, y_pred, labels=[0, 1], target_names=['Ham', 'Spam'], zero_division=0))
         print(f"Accuracy: {accuracy_score(y, y_pred):.4f}")
 
 if __name__ == "__main__":

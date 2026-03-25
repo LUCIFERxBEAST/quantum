@@ -20,8 +20,15 @@ class FeatureExtractor:
         # Convert to dense for PCA
         dense_tfidf = tfidf_matrix.toarray()
         
-        # 2. PCA
-        pca_features = self.pca.fit_transform(dense_tfidf)
+        # 2. PCA (Handle edge cases where n_samples < n_components)
+        n_samples, n_feats = dense_tfidf.shape
+        if n_samples < self.n_components:
+            # PCA cannot reduce 1 sample to 2 dimensions. Pad directly.
+            pca_features = np.zeros((n_samples, self.n_components))
+            cols = min(n_feats, self.n_components)
+            pca_features[:, :cols] = dense_tfidf[:, :cols]
+        else:
+            pca_features = self.pca.fit_transform(dense_tfidf)
         
         # 3. Scaling for Quantum
         # Quantum gates usually rotate by angle * feature, so [0, 1] mapped to [0, 2pi] 
