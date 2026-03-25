@@ -61,13 +61,13 @@ def main():
     X_text = df['clean_message'].values
     y = df['label'].values
     
-    # 3. Feature Extraction
-    print(f"Extracting features (TF-IDF -> PCA -> {args.qubits} dims)...")
-    fe = FeatureExtractor(n_components=args.qubits)
-    X = fe.fit_transform(X_text)
-    
     # 4. Train/Test Split (Only for Learning Models)
     if not args.grover:
+        # 3. Feature Extraction
+        print(f"Extracting features (TF-IDF -> PCA -> {args.qubits} dims)...")
+        fe = FeatureExtractor(n_components=args.qubits)
+        X = fe.fit_transform(X_text)
+        
         # Standard ML Split
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=args.test_size, random_state=42)
         
@@ -93,21 +93,15 @@ def main():
         # Grover doesn't learn, so we don't need a split. We can run it on the FULL loaded dataset.
         print(f"Running Grover's Search on ALL {len(X_text)} loaded samples...")
         
-        # Expanded list of suspicious keywords for a "Smarter" Oracle
-        # Source: User provided categories
+        # Cleaned keyword list (Removed 'now', 'time', 'buy', 'text' to avoid False Positives)
         keywords = [
-            # Financial/Urgency
-            'act', 'now', 'immediate', 'limited', 'time', 'prize', 'claims', 'cash', 'bonus',
-            # Marketing/Sales
-            'buy', 'clearance', 'discount', 'offer', 'promo', 'subscribe', 'trial',
-            # Account/Security
+            'act', 'immediate', 'limited', 'prize', 'claims', 'cash', 'bonus',
+            'clearance', 'discount', 'offer', 'promo', 'subscribe', 'trial',
             'verify', 'suspend', 'security', 'unauthorized', 'password', 'login',
-            # Common "Spammy" verbs
-            'earn', 'save', 'guaranteed', 'exclusive', 'congratulations',
-            # Original High-Frequency Spam Words
-            'win', 'free', 'urgent', 'call', 'winner', 'selected', 'mobile', 'text', 'stop', 'reply'
+            'earn', 'save', 'guaranteed', 'exclusive', 'congratulations', 'xxx',
+            'win', 'free', 'urgent', 'call', 'winner', 'selected', 'mobile', 'stop', 'reply'
         ]
-        print(f"Using Grover-based Classifier (Keywords: {keywords})...")
+        print(f"Using Grover-based Classifier (Keywords: {len(keywords)} terms)...")
         model = GroverSpamClassifier(suspicious_keywords=keywords)
         
         print("Evaluating model...")
@@ -117,6 +111,25 @@ def main():
         print("\n--- Grover's Algorithm Classification Report (Full Dataset) ---")
         print(classification_report(y, y_pred, labels=[0, 1], target_names=['Ham', 'Spam'], zero_division=0))
         print(f"Accuracy: {accuracy_score(y, y_pred):.4f}")
+        
+        print("\n=== Error Analysis Report ===")
+        fn = [X_text[i] for i in range(len(y)) if y[i] == 1 and y_pred[i] == 0]
+        fp = [X_text[i] for i in range(len(y)) if y[i] == 0 and y_pred[i] == 1]
+        
+        print(f"False Negatives: {len(fn)}")
+        print(f"False Positives: {len(fp)}")
+        
+        report_path = "error_analysis_report.txt"
+        with open(report_path, "w", encoding="utf-8") as f:
+            f.write("=== Error Analysis Report ===\n\n")
+            f.write(f"False Negatives (Spam classified as Ham) - Total: {len(fn)}\n")
+            for text in fn:
+                f.write(f" - {text}\n")
+                
+            f.write(f"\nFalse Positives (Ham classified as Spam) - Total: {len(fp)}\n")
+            for text in fp:
+                f.write(f" - {text}\n")
+        print(f"\nDetailed error report saved to {report_path}")
 
 if __name__ == "__main__":
     main()

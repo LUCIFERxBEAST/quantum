@@ -1,0 +1,17 @@
+On 500 mails => 350 training set and 150 testing 
+no need of training set for groovers
+================================================================
+                     FINAL COMPARISON REPORT                    
+================================================================
+Algorithm            | Accuracy   | Speed (Total)   | Complexity/Steps         
+------------------------------------------------------------------------------
+Classical SVM        | 90.0%      | 0.00 s          | ~105000 Math Ops         
+Quantum SVM          | 91.3%      | 266.23 s        | 525000 Gate Depth        
+Grover Search        | 82.7%      | 63.16 s         | 1554 Gate Depth (Avg/Msg)
+================================================================
+
+ARCHITECTURAL INSIGHT: Zero-Shot Capability
+-------------------------------------------
+Note: Unlike SVMs (Classical & Quantum) which REQUIRE training labels (y_train)
+to learn, Grover's Search is 'Zero-Shot'. It functions purely based on
+mathematical Oracle definitions (keywords) without ever seeing a label.

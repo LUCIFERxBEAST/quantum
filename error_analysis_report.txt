@@ -1,0 +1,6 @@
+=== Error Analysis Report ===
+
+False Negatives (Spam classified as Ham) - Total: 1
+ - ur cashbalance is currently 500 pounds  to maximize ur cashin now send go to 86688 only 150pmsg cc 08718720201 po box 11414 tcrw1
+
+False Positives (Ham classified as Spam) - Total: 0
