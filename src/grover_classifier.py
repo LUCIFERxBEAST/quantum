@@ -16,7 +16,6 @@ class GroverSpamClassifier:
     """
     def __init__(self, suspicious_keywords):
         self.suspicious_keywords = [k.lower() for k in suspicious_keywords]
-        print(f"Initialized Quantum Grover Classifier with keywords: {self.suspicious_keywords}")
 
     def _quantum_search(self, words):
         # Limit email length to avoid statevector simulation size exploding
@@ -139,7 +138,7 @@ class GroverSpamClassifier:
             fig = grover_step.draw(output='mpl', fold=30)
             fig.savefig("final_grover.png", bbox_inches="tight")
         except Exception as e:
-            print(f"DEBUG: Failed to draw MPL image: {e}")
+            pass
         
         # ==========================================
         # BBHT ALGORITHM (Boyer-Brassard-Høyer-Tapp)
@@ -194,24 +193,13 @@ class GroverSpamClassifier:
 
     def predict(self, texts):
         predictions = []
-        total = len(texts)
-        print(f"Running TRUE Quantum Simulation for {total} messages...")
-        print("Note: True quantum oracles are computationally heavy to simulate classically.")
-        
-        for i, text in enumerate(texts):
+        for text in texts:
             words = text.lower().split()
             is_spam = self._quantum_search(words)
             predictions.append(1 if is_spam else 0)
-            
-            if (i+1) % 1 == 0:
-                print(f"  Processed {i+1}/{total} messages...")
-                
         return np.array(predictions)
 
     def evaluate(self, X_text, y_test):
-        print("Running Grover-based Classification...")
-        print(f"Keywords Checked (Quantum Oracle): {self.suspicious_keywords}")
-        
         y_pred = self.predict(X_text)
         
         print("\n--- Grover's Algorithm Classification Report ---")
