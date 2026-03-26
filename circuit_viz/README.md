@@ -2,18 +2,18 @@
 
 This directory contains a high-fidelity visual breakdown of the Quantum Search Algorithm used in the spam classification pipeline.
 
-## 🛠️ Dynamic Architecture Overview
+## Dynamic Architecture Overview
 The quantum circuit is **not static**. It is recompiled for every email to ensure optimal qubit usage and sub-linear search complexity.
 
 ### 1. Adaptive Qubit Scaling
-The circuit automatically calculates the required number of **Address Qubits** based on the email's word count ($log_2(N)$). 
+The circuit automatically calculates the required number of **Address Qubits** based on the email's word count log_2(N). 
 -   A 4-word SMS (like the one in these diagrams) uses **2 Address Qubits**.
 -   A 20-word message would use **5 Address Qubits**.
 This ensures that the quantum search space is exactly as large as it needs to be, increasing simulation speed and accuracy.
 
 ---
 
-## 🧩 Circuit Components
+## Circuit Components
 
 ### [qram.png] - The Data Loader
 **What it does**: Maps the sequence of words from the email into a quantum superposition.
@@ -35,7 +35,7 @@ This ensures that the quantum search space is exactly as large as it needs to be
 
 ---
 
-## 📦 Visualization Data
+## Visualization Data
 The diagrams in this folder were generated from the following representative sample:
 -   **Email**: `"win free prize now"`
 -   **Keywords**: `["win", "free", "prize", "urgent"]`
@@ -68,7 +68,7 @@ This guide explains every symbol seen in the high-fidelity PNGs and the [exact_a
 
 ---
 
-## 🚀 Comparison: Logical vs. Physical
+## Comparison: Logical vs. Physical
 -   **Logical (High-Level)**: You might think of "Load Word 1".
 -   **Physical (What you see here)**: To "Load Word 1", the computer must perform a sequence of `H`, `T`, and `CX` gates to manipulate the quantum wave-function. 
 
