@@ -4,7 +4,7 @@ This project demonstrates a high-performance **Quantum Spam Classifier** using t
 
 ---
 
-## 🚀 Final Performance (500-Sample Benchmark)
+## Final Performance (500-Sample Benchmark)
 We benchmarked the system on **500 balanced SMS samples** (350 Training / 150 Testing).
 
 | Algorithm        | Accuracy | Speed (Total) | Complexity / Steps       |
@@ -15,7 +15,7 @@ We benchmarked the system on **500 balanced SMS samples** (350 Training / 150 Te
 
 ---
 
-## 🧠 Key Architectural Insights
+## Key Architectural Insights
 
 ### 1. Quantum SVM: Higher Dimensional Precision
 The **Quantum Support Vector Classifier** achieved the highest accuracy (91.3%). By using a **ZZFeatureMap**, it maps text features into a high-dimensional Hilbert space that classical computers struggle to simulate, allowing for a more nuanced decision boundary between "Ham" and "Spam".
@@ -34,7 +34,7 @@ A unique feature of this implementation is that the **Quantum Circuit is not sta
 
 ---
 
-## 🛠️ Optimizations & Innovations
+## Optimizations & Innovations
 
 - **BBHT-Optimized Iteration**: Replaced static Grover iterations with the **Boyer-Brassard-Høyer-Tapp** algorithm to handle unknown spam keyword counts across different emails.
 - **MCMT Efficiency**: Used Multi-Controlled Multi-Target (MCMT) gates to reduce transpilation overhead, making 500-sample simulations possible on standard hardware.
@@ -42,7 +42,7 @@ A unique feature of this implementation is that the **Quantum Circuit is not sta
 
 ---
 
-## 📦 How to Run
+## How to Run
 
 ### Install Dependencies
 ```bash
