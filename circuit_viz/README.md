@@ -42,7 +42,7 @@ The diagrams in this folder were generated from the following representative sam
 -   **Total Qubits**: 5 (2 Address + 3 Data)
 -   **Circuit Depth**: Optimized via MCMT gate compression.
 
-## 🔬 The Complete Gate & Symbol Glossary
+## The Complete Gate & Symbol Glossary
 This guide explains every symbol seen in the high-fidelity PNGs and the [exact_architecture.txt](exact_architecture.txt) report.
 
 ### 1. The Qubits (q_0 to q_4)
