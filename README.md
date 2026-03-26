@@ -1,4 +1,4 @@
-# Quantum-Accelerated Spam Detection
+# Quantum-Based Spam Detection
 
 This project demonstrates a high-performance **Quantum Spam Classifier** using two distinct architectures: **Quantum SVM (QSVC)** for learning-based detection and **Grover's Search** for zero-shot keyword identification.
 
