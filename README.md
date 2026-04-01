@@ -11,7 +11,7 @@ We benchmarked the system on **500 balanced SMS samples** (350 Training / 150 Te
 |------------------|----------|---------------|--------------------------|
 | **Classical SVM**| 90.0%    | < 0.01 s      | ~105,000 Operations      |
 | **Quantum SVM**  | **91.3%**| 266.23 s      | 525,000 Gate Depth       |
-| **Grover Search**| 82.7%    | 63.16 s       | 1,554 Gates (Zero-Shot)  |
+| **Grover Search**| 82.7%    | 63.16 s       | 1,554 Gates (Zero Shot)  |
 
 ---
 
